@@ -32,8 +32,31 @@ def load_data(data_dir, dataset='wiki'):
               
     elif dataset == 'jdata':
         pass
+    
     elif dataset == 'cora':
-        pass
+        G = nx.Graph()
+        with open(data_dir / 'cora/cora.cites', 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            edge_list = [tuple(edge_info.strip().split(' ')) for edge_info in lines]
+            G.add_edges_from(edge_list)
+        
+        with open(data_dir / 'cora/cora.content', 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            nodes = []
+            feats = []
+            labels = []
+            for feature_info in lines:
+                features = feature_info.strip().split(' ')
+                nodes.append(features[0])
+                feats.append([int(col_feat) for col_feat in features[1: -1]])
+                labels.append(features[-1])
+        
+        unique_labels = list(set(labels))
+        label_map = {label: i for i, label in enumerate(unique_labels)}   
+        
+        for node, feat, label in zip(nodes, feats, labels):
+            G.nodes[node]['feature'] = feat
+            G.nodes[node]['label'] = label_map[label]
     
     return G
 
