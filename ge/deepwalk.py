@@ -2,25 +2,13 @@ import random
 
 import torch
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import numpy as np
 from tqdm import tqdm
 
 from .module.walker import RandomWalker
 from .module.word2vec import Word2Vec
-
-
-class PosPairDataset(Dataset):
-    def __init__(self, pairs) -> None:
-        super().__init__()
-        self.pairs = pairs
-        
-    def __len__(self,):
-        return len(self.pairs)
-    
-    def __getitem__(self, index):
-        pos_u, pos_v = self.pairs[index]
-        return pos_u, pos_v
+from .module.dataset import PosPairDataset
         
     
 class DeepWalk:
