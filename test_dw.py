@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 dw_params = EasyDict()
 dw_params.WALK_LEN = 10
-dw_params.NUM_WALK = 20
+dw_params.NUM_WALK = 30
 dw_params.LR = 0.025
 dw_params.EMBEDDING_DIM = 128
 dw_params.WINDOW_SIZE = 3
@@ -23,7 +23,7 @@ dw_params.BATCH_SIZE = 10000
 dw_params.NUM_NEG = 5
 dw_params.SEED = 2023
 
-DATASET = 'cosearch'
+DATASET = 'cora'
 
 FILE_NAME = ['_'.join([par.lower(), str(val)]) for par, val in dw_params.items()]
 FILE_NAME = '-'.join([f'ds_{DATASET}'] + FILE_NAME)
@@ -61,9 +61,10 @@ if __name__=="__main__":
         
     embedding_dict = dw.get_all_embeddings()
     colors = []
-    for node in G.nodes:
+    for node in embedding_dict:
         try:
             c = int(G.nodes[node]['label'])
+            colors.append(c)
         except:
             colors = None
             break
