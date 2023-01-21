@@ -14,10 +14,10 @@ warnings.filterwarnings('ignore')
 
 dw_params = EasyDict()
 dw_params.WALK_LEN = 10
-dw_params.NUM_WALK = 30
+dw_params.NUM_WALK = 50
 dw_params.LR = 0.025
 dw_params.EMBEDDING_DIM = 128
-dw_params.WINDOW_SIZE = 3
+dw_params.WINDOW_SIZE = 5
 dw_params.EPOCHS = 5
 dw_params.BATCH_SIZE = 10000
 dw_params.NUM_NEG = 5

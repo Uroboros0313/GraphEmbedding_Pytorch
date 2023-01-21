@@ -73,7 +73,7 @@ def visualize_embeddings(embedding_dict, save_path, title:str=None, colors=None)
         ys.append(y)
     
     plt.figure(figsize=(10, 10)) 
-    plt.scatter(xs, ys, s=1, c=colors)
+    plt.scatter(xs, ys, s=5, c=colors)
     plt.title(title)
     plt.savefig(save_path)
     
