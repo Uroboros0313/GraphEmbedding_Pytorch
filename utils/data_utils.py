@@ -22,7 +22,14 @@ def load_data(data_dir, dataset='wiki'):
             for label_info in lines:
                 node, label = label_info.strip().split(' ')
                 G.nodes[node]['label'] = label
-                
+
+    elif dataset == 'cosearch':
+        G = nx.Graph()
+        with open(data_dir / 'cosearch/co_search_2016.txt', 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            edge_list = [tuple(edge_info.strip().split(' ')) for edge_info in lines]
+            G.add_weighted_edges_from(edge_list)
+              
     elif dataset == 'jdata':
         pass
     elif dataset == 'cora':
