@@ -27,7 +27,10 @@ def load_data(data_dir, dataset='wiki'):
         G = nx.Graph()
         with open(data_dir / 'cosearch/co_search_2016.txt', 'r', encoding='utf-8') as f:
             lines = f.readlines()
-            edge_list = [tuple(edge_info.strip().split(' ')) for edge_info in lines]
+            edge_list = []
+            for edge_info in lines:
+                sc, tg, w = edge_info.strip().split(' ')
+                edge_list.append((sc, tg, int(w)))
             G.add_weighted_edges_from(edge_list)
               
     elif dataset == 'jdata':

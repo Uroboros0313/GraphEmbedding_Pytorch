@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class NegativeSamplingLoss(nn.Module):
     def __init__(self) -> None:
         super().__init__()
@@ -44,7 +45,7 @@ class Word2Vec(nn.Module):
     def get_u_vecs(self, idxs):
         return self.U(idxs)
 
-  
+
 class WeightedWord2Vec(nn.Module):
     def __init__(self):
         super().__init__()
