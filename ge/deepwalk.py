@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import tqdm
 
 from .module.walker import RandomWalker
-from .module.word2vec import Word2Vec
+from .module.layers import Word2Vec
 from .module.dataset import PosPairDataset
         
     
