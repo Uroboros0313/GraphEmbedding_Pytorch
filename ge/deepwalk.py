@@ -53,7 +53,7 @@ class DeepWalk:
         if self.use_noise_dist == True:
             self.__init_noise_weights('frequency', sentences)
         else:
-            self.noise_weights = torch.ones(len(self.nodes)).view(1, -1)
+            self.noise_weights = torch.ones(len(self.nodes)).view(1, )
         
         print('INFO: Generating Positive Pairs...')
         pairs = self.gen_context_pairs(sentences)
