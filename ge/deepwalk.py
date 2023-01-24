@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 from .module.walker import RandomWalker
 from .module.layers import Word2Vec
-from .module.dataset import PosPairDataset
+from .module.data import PosPairDataset
         
     
 class DeepWalk:
@@ -17,7 +17,7 @@ class DeepWalk:
         G,
         walk_len=10,
         num_walk=30,
-        weighted_walk=0,
+        walk_type='random',
         lr=0.01,
         embedding_dim=128,
         window_size=5,
@@ -32,7 +32,7 @@ class DeepWalk:
         self.G = G
         self.walk_len = walk_len
         self.num_walk = num_walk
-        self.weighted_walk = weighted_walk
+        self.walk_type = walk_type
         self.epochs = epochs
         self.batch_size = batch_size
         self.window_size = window_size
@@ -45,12 +45,12 @@ class DeepWalk:
         self.idx2node = dict([(idx, node) for idx, node in enumerate(list(G.nodes))])
         self.node2idx = dict([(node, idx) for idx, node in self.idx2node.items()])
         self.w2v_model = Word2Vec(vocab_size=len(self.nodes), embedding_dim=embedding_dim).to(device)
-        self.random_walker = RandomWalker(G, walk_len, num_walk, weighted_walk)
+        self.random_walker = RandomWalker(G, walk_len, num_walk, walk_type=self.walk_type)
         self.optimizer = optim.SparseAdam(self.w2v_model.parameters(), lr=lr, )
         
     def train(self):
         print('INFO: Generating Walks...')
-        sentences = self.random_walker.gen_dw_walks()
+        sentences = self.random_walker.gen_walks()
         
         if self.use_noise_dist == True:
             self.__init_noise_weights('frequency', sentences)

@@ -46,7 +46,7 @@ class Word2Vec(nn.Module):
         return self.U(idxs)
 
 
-class WeightedWord2Vec(nn.Module):
+class Word2VecWithSideInfo(nn.Module):
     def __init__(self):
         super().__init__()
         

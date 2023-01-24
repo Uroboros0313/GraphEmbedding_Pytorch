@@ -7,4 +7,4 @@ import numpy as np
 from tqdm import tqdm
 
 from .module.walker import RandomWalker
-from .module.layers import Word2Vec, WeightedWord2Vec
+from .module.layers import Word2Vec, Word2VecWithSideInfo
