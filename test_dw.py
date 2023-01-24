@@ -13,9 +13,9 @@ from ge.deepwalk import DeepWalk
 warnings.filterwarnings('ignore')
 
 dw_params = EasyDict()
-dw_params.WEIGHTED_WALK = 0
 dw_params.WALK_LEN = 10
 dw_params.NUM_WALK = 50
+dw_params.WALK_TYPE = 'random'
 dw_params.LR = 0.025
 dw_params.EMBEDDING_DIM = 128
 dw_params.WINDOW_SIZE = 5
@@ -24,13 +24,13 @@ dw_params.BATCH_SIZE = 10000
 dw_params.NUM_NEG = 5
 dw_params.SEED = 2023
 
-DATASET = 'cosearch'
+DATASET = 'cora'
 
 FILE_NAME = ['_'.join([par.lower(), str(val)]) for par, val in dw_params.items()]
 FILE_NAME = '-'.join([f'ds_{DATASET}'] + FILE_NAME)
 
-MODEL_PATH = pathlib.Path('./checkpoints/deepwalk_w2v/{}.pt'.format(FILE_NAME))
-PICS_PATH = pathlib.Path('./pics/deepwalk_w2v/{}.png'.format(FILE_NAME))
+MODEL_PATH = pathlib.Path('./checkpoints/deepwalk/{}.pt'.format(FILE_NAME))
+PICS_PATH = pathlib.Path('./pics/deepwalk/{}.png'.format(FILE_NAME))
 
 DEVICE = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 G = load_data(data_dir='./data', dataset=DATASET)
@@ -41,7 +41,7 @@ if __name__=="__main__":
     dw = DeepWalk(G,
                 walk_len=dw_params.WALK_LEN,
                 num_walk=dw_params.NUM_WALK,
-                weighted_walk=dw_params.WEIGHTED_WALK,
+                walk_type=dw_params.WALK_TYPE,
                 lr=dw_params.LR,
                 embedding_dim=dw_params.EMBEDDING_DIM,
                 window_size=dw_params.WINDOW_SIZE,
