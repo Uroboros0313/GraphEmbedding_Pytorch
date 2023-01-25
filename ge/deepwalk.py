@@ -49,7 +49,6 @@ class DeepWalk:
         self.optimizer = optim.SparseAdam(self.w2v_model.parameters(), lr=lr, )
         
     def train(self):
-        print('INFO: Generating Walks...')
         sentences = self.random_walker.gen_walks()
         
         if self.use_noise_dist == True:
@@ -58,7 +57,7 @@ class DeepWalk:
             self.noise_weights = torch.ones(len(self.nodes)).view(1, )
         
         print('INFO: Generating Positive Pairs...')
-        pairs = self.gen_context_pairs(sentences)
+        pairs = self.__gen_positive_pairs(sentences)
         
         dataset = PosPairDataset(pairs)
         dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True, num_workers=10, pin_memory=False, )
@@ -70,7 +69,7 @@ class DeepWalk:
             
             for pos_u, pos_v in tqdm(dataloader):
                 batch_size = pos_u.shape[0]
-                neg_vs = self.__get_negative_samples(batch_size, self.num_neg)
+                neg_vs = self.__gen_negative_samples(batch_size, self.num_neg)
                 
                 pos_u, pos_v, neg_vs =\
                     pos_u.to(self.device), pos_v.to(self.device), neg_vs.to(self.device) 
@@ -81,17 +80,17 @@ class DeepWalk:
             print("Epoch: {}, Loss: {:.4f}, memory usage: {:.4f} MiB".\
                     format(epoch + 1, epoch_loss, gpu_mem_alloc))
     
-    def gen_context_pairs(self, sentences):
+    def __gen_positive_pairs(self, sentences):
         pairs = []
         for sent in tqdm(sentences):
             pairs.extend(self.__gen_sentence_pairs(sent))
         return pairs
     
-    def save_w2v(self, file_path):
+    def save_model(self, file_path):
         torch.save(self.w2v_model.state_dict(), file_path)
         print('Saved w2v_model in {}...'.format(file_path))
         
-    def load_w2v(self, file_path):
+    def load_model(self, file_path):
         self.w2v_model.load_state_dict(torch.load(file_path))
         print('Loaded w2v_model in {}...'.format(file_path))
     
@@ -134,7 +133,7 @@ class DeepWalk:
                             self.node2idx[sent[cont_idx]]))
         return pairs
     
-    def __get_negative_samples(self, batch_size, num_neg):
+    def __gen_negative_samples(self, batch_size, num_neg):
         neg_vs = torch.multinomial(
             self.noise_weights, num_neg * batch_size, replacement=True)\
                 .view(batch_size, num_neg)

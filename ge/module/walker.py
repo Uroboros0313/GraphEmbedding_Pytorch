@@ -28,10 +28,9 @@ class RandomWalker():
         
         self.nodes_alias_sampler = None
         self.edges_alias_sampler = None
-        
-        self.init_alias()
     
     def gen_walks(self):
+        self.init_alias()
         nodes = list(self.G.nodes)
         
         if self.walk_type == 'random':
@@ -43,6 +42,7 @@ class RandomWalker():
         elif self.walk_type == 'rejection':
             opt = self.__reject_sampling_walk
         
+        print('INFO: Generating Walks...')
         walks = []
         for node in tqdm(nodes):
             walks.extend(opt(node))  

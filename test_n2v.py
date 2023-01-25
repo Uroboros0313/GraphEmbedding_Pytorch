@@ -58,9 +58,9 @@ if __name__=="__main__":
         n2v.train()
         if not os.path.exists(MODEL_PATH.parent):
             os.makedirs(MODEL_PATH.parent, exist_ok=True)
-        n2v.save_w2v(MODEL_PATH)
+        n2v.save_model(MODEL_PATH)
     else:
-        n2v.load_w2v(MODEL_PATH)
+        n2v.load_model(MODEL_PATH)
     
     if not os.path.exists(PICS_PATH.parent):
         os.makedirs(PICS_PATH.parent, exist_ok=True)

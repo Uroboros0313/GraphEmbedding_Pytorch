@@ -17,7 +17,52 @@ class NegativeSamplingLoss(nn.Module):
         neg_loss = neg_loss.squeeze().sum(dim=1)
         
         return - (pos_loss + neg_loss).mean()
-
+    
+    
+class LineModel(nn.Module):
+    def __init__(
+        self,
+        vocab_size,
+        embedding_dim,
+        order='first',):
+        super().__init__()
+        
+        if order == 'all':
+            embedding_dim = embedding_dim // 2
+        else:
+            embedding_dim = embedding_dim
+        
+        self.embedding_dim = embedding_dim
+        self.node_embeddings = nn.Embedding(vocab_size, embedding_dim, sparse=True)
+        self.context_embeddings = nn.Embedding(vocab_size, embedding_dim, sparse=True)
+        self.order = order
+        self.ns_loss = NegativeSamplingLoss()
+        self.reset_parameters()
+    
+    def reset_parameters(self):
+        nn.init.uniform_(self.node_embeddings.weight,
+                         -0.5 / self.embedding_dim, 0.5 / self.embedding_dim)
+        nn.init.uniform_(self.context_embeddings.weight,
+                         -0.5 / self.embedding_dim, 0.5 / self.embedding_dim)
+        
+    def forward(self, pos_nodes_idxs, pos_neighs_idxs, neg_neighs_idxs):
+        
+        pos_nodes = self.node_embeddings(pos_nodes_idxs)
+        pos_neighs = self.node_embeddings(pos_neighs_idxs)
+        neg_neighs = self.node_embeddings(neg_neighs_idxs)
+        
+        pos_context = self.context_embeddings(pos_neighs_idxs)
+        neg_context = self.context_embeddings(neg_neighs_idxs)
+        
+        if self.order == 'first':
+            return self.ns_loss(pos_nodes, pos_neighs, neg_neighs)
+        elif self.order == 'second':
+            return self.ns_loss(pos_nodes, pos_context, neg_context)
+        elif self.order == 'all':
+            first_order_loss = self.ns_loss(pos_nodes, pos_neighs, neg_neighs)
+            second_order_loss = self.ns_loss(pos_nodes, pos_context, neg_context)
+            return first_order_loss + second_order_loss
+            
 
 class Word2Vec(nn.Module):
     def __init__(
@@ -32,6 +77,14 @@ class Word2Vec(nn.Module):
         self.V = nn.Embedding(vocab_size, embedding_dim, sparse=True)
         self.ns_loss = NegativeSamplingLoss()
         
+        self.reset_parameters()
+    
+    def reset_parameters(self):
+        nn.init.uniform_(self.U.weight,
+                         -0.5 / self.embedding_dim, 0.5 / self.embedding_dim)
+        nn.init.uniform_(self.V.weight,
+                         -0.5 / self.embedding_dim, 0.5 / self.embedding_dim)
+            
     def forward(self, pos_u_idxs, pos_v_idxs, neg_v_idxs):
         pos_u = self.get_u_vecs(pos_u_idxs)
         pos_v = self.get_v_vecs(pos_v_idxs)
