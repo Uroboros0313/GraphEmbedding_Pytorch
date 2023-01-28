@@ -20,6 +20,18 @@ class AliasSampler():
     def get_alias_table(self, key):
         return self.alias_tables[key]
     
+    def alias_list(self, key, index_list):
+        accept, alias = self.alias_tables[key]
+        
+        result_list = []
+        for idx in index_list:
+            if np.random.random() < accept[idx]:
+                result_list.append(idx)
+            else:
+                result_list.append(alias[idx])
+                
+        return result_list
+    
     def alias_sample(self, key):
         accept, alias = self.alias_tables[key]
         
@@ -68,11 +80,11 @@ class AliasSampler():
                 
         while small:
             small_idx = small.pop()
-            accept[small_idx] = 1
+            accept[small_idx] = 1.0
         
         while large:
             large_idx = large.pop()
-            accept[large_idx] = 1
+            accept[large_idx] = 1.0
         
         self.alias_tables[key] = (accept, alias)
     
