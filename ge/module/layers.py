@@ -27,11 +27,6 @@ class LineModel(nn.Module):
         order='first',):
         super().__init__()
         
-        if order == 'all':
-            embedding_dim = embedding_dim // 2
-        else:
-            embedding_dim = embedding_dim
-        
         self.embedding_dim = embedding_dim
         self.node_embeddings = nn.Embedding(vocab_size, embedding_dim, sparse=True)
         self.context_embeddings = nn.Embedding(vocab_size, embedding_dim, sparse=True)
@@ -58,10 +53,6 @@ class LineModel(nn.Module):
             return self.ns_loss(pos_nodes, pos_neighs, neg_neighs)
         elif self.order == 'second':
             return self.ns_loss(pos_nodes, pos_context, neg_context)
-        elif self.order == 'all':
-            first_order_loss = self.ns_loss(pos_nodes, pos_neighs, neg_neighs)
-            second_order_loss = self.ns_loss(pos_nodes, pos_context, neg_context)
-            return first_order_loss + second_order_loss
             
 
 class Word2Vec(nn.Module):
