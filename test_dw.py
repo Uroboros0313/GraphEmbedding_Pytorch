@@ -7,7 +7,7 @@ from easydict import EasyDict
 
 from utils.data_utils import *
 from utils.option_utils import *
-from ge.deepwalk import DeepWalk
+from ge.models import DeepWalk
 
 
 warnings.filterwarnings('ignore')

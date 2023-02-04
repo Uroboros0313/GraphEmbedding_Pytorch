@@ -7,7 +7,7 @@ from easydict import EasyDict
 
 from utils.data_utils import *
 from utils.option_utils import *
-from ge.node2vec import Node2Vec
+from ge.models import Node2Vec
 
 
 warnings.filterwarnings('ignore')

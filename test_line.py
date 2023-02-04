@@ -7,7 +7,7 @@ from easydict import EasyDict
 
 from utils.data_utils import *
 from utils.option_utils import *
-from ge.line import LINE
+from ge.models import LINE
 
 
 warnings.filterwarnings('ignore')
