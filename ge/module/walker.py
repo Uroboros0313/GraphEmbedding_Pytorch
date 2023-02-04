@@ -78,6 +78,8 @@ class RandomWalker():
             for j in range(self.walk_len):
                 neighs = list(self.G.neighbors(cur))
                 next_idx = self.nodes_alias_sampler.alias_sample(cur)
+                if next_idx == None:
+                    break
                 next = neighs[next_idx]
                 walk.append(next)
                 cur = next

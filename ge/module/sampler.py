@@ -38,6 +38,9 @@ class AliasSampler():
         N = len(accept)
         idx, rd = int(np.random.random() * N), np.random.random()
         
+        if len(accept) == 0:
+            return None
+        
         if rd < accept[idx]:
             return idx
         else:
@@ -87,6 +90,11 @@ class AliasSampler():
             accept[large_idx] = 1.0
         
         self.alias_tables[key] = (accept, alias)
+        
+        
+class NeighborSampler():
+    def __init__(self) -> None:
+        super().__init__()
     
     
     
