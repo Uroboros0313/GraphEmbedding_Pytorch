@@ -26,6 +26,7 @@ class EGES:
         num_neg=5,
         use_noise_dist=True,
         ns_exponent=0.75,
+        ge_type='eges',
         device=torch.device('cpu')
         ) -> None:
         
@@ -63,9 +64,15 @@ class EGES:
         self.info_maps = info_maps
         self.info_vals = torch.LongTensor(list(info_dict.values())).transpose(0, 1)
         
+        if ge_type == 'eges':
+            use_embedding_weight = True
+        elif ge_type == 'ges':
+            use_embedding_weight = False
         self.w2v_model = Word2VecWithSideInfo(vocab_size=len(self.nodes), 
                                               info_sizes=info_sizes,
-                                              embedding_dim=embedding_dim).to(device)
+                                              embedding_dim=embedding_dim,
+                                              use_embedding_weight=use_embedding_weight).to(device)
+        
         self.random_walker = RandomWalker(G, walk_len, num_walk, walk_type=self.walk_type)
         self.optimizer = optim.Adam(self.w2v_model.parameters(), lr=lr, )
         

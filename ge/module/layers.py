@@ -91,7 +91,7 @@ class Word2VecWithSideInfo(nn.Module):
         vocab_size,
         info_sizes,
         embedding_dim,
-        weighted=True) -> None:
+        use_embedding_weight=True) -> None:
         super().__init__()
         
         self.vocab_size = vocab_size
@@ -103,7 +103,7 @@ class Word2VecWithSideInfo(nn.Module):
         self.V = nn.Embedding(vocab_size, embedding_dim)
         self.ns_loss = NegativeSamplingLoss()
         
-        if weighted == True:
+        if use_embedding_weight == True:
             self.alpha = nn.parameter.Parameter(torch.randn((len(info_sizes) + 1), 1), requires_grad=True)
             nn.init.xavier_uniform_(self.alpha, gain=nn.init.calculate_gain('sigmoid'))
         else:

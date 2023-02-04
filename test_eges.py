@@ -22,6 +22,7 @@ eges_params.WINDOW_SIZE = 5
 eges_params.EPOCHS = 5
 eges_params.BATCH_SIZE = 10000
 eges_params.NUM_NEG = 5
+eges_params.GE_TYPE = 'eges'
 eges_params.SEED = 2023
 
 DATASET = 'jdata'
@@ -48,6 +49,7 @@ if __name__=="__main__":
                 epochs=eges_params.EPOCHS,
                 batch_size=eges_params.BATCH_SIZE,
                 num_neg=eges_params.NUM_NEG,
+                ge_type=eges_params.GE_TYPE,
                 device=DEVICE,)
     
     if not os.path.exists(MODEL_PATH):
